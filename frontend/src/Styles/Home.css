@@ -1,0 +1,199 @@
+/* =====================
+   BASIC RESET
+   ===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* =====================
+   BODY
+   ===================== */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f5f7fb;
+}
+
+/* =====================
+   APP LAYOUT
+   ===================== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content expands so footer stays at bottom */
+.main-content {
+  flex: 1;
+}
+
+/* =====================
+   NAVBAR
+   ===================== */
+.navbar {
+  background-color: #1b1b1b;
+  padding: 15px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-links a {
+  text-decoration: none;
+}
+
+.nav-links button {
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.nav-links button:hover {
+  background-color: white;
+  color: black;
+  border-radius: 6px;
+}
+
+/* =====================
+   HERO / MAIN CARD
+   ===================== */
+.main-card {
+  background-color: white;
+  margin: 30px 7%;
+  padding: 50px 30px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.main-card h1 {
+  margin-bottom: 10px;
+}
+
+.main-card p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.main-card button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.main-card button:first-child {
+  background-color: #4a90d9;
+  color: white;
+}
+
+.main-card button:last-child {
+  background-color: #1b1b1b;
+  color: white;
+}
+
+/* =====================
+   CONTENT SECTION
+   ===================== */
+.content {
+  text-align: center;
+  margin: 40px 7%;
+  padding: 30px;
+}
+
+.content p {
+  color: #666;
+}
+
+/* =====================
+   FEATURES
+   ===================== */
+/* FEATURES CONTAINER */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 40px 7%;
+  flex-wrap: wrap;
+}
+
+/* FEATURE CARD */
+.feature-card {
+  background-color: white;
+  width: 280px;
+  padding: 25px 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ICON */
+.feature-card h3:first-child {
+  font-size: 36px;
+  color: #4a90d9;
+  margin-bottom: 12px;
+}
+
+/* TITLE */
+.feature-card h3:nth-child(2) {
+  font-size: 18px;
+  color: #1b1b1b;
+  margin-bottom: 10px;
+}
+
+/* DESCRIPTION */
+.feature-card p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+
+/* =====================
+   CTA SECTION
+   ===================== */
+.jump {
+  background-color: #1b1b1b;
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+  margin: 30px 7%;
+  border-radius: 10px;
+}
+
+.jump p {
+  color: #ccc;
+  margin: 15px 0;
+}
+
+.jump button {
+  padding: 10px 24px;
+  background-color: #4a90d9;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+

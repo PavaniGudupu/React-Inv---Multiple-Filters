@@ -1,0 +1,368 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+/* Hero Section */
+.hero-section {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #111;
+}
+
+/* Container */
+.hero-section .container {
+  max-width: 800px;
+  padding: 20px;
+}
+
+/* Icon */
+.hero-icon {
+  color: #eb2626;
+  margin-bottom: 10px;
+}
+
+/* #f5b301; */
+
+/* Title */
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.hero-subtitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #f5b301;
+  margin-bottom: 20px;
+}
+
+/* Description */
+.hero-description {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Primary Button */
+.btn-primary-gradient {
+  background-color: #f5b301;
+  color: #000;
+  padding: 10px 24px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Outline Button */
+.custom-outline-btn {
+  border: 2px solid #000;
+  color: #000;
+  padding: 10px 24px;
+  border-radius: 25px;
+  background-color: transparent;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: Arial, sans-serif;
+  color: #000;
+  background-color: #fff;
+  padding: 20px;
+}
+
+/* PRODUCT SECTION */
+.product-section {
+  min-height: 100vh;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* HEADING */
+.page-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* BUTTON GROUP */
+.button-group,
+.left-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #0187f5;
+  color: #fff;
+}
+
+.btn-add {
+  background-color: #f5b301;
+  color: #000;
+}
+
+.btn-secondary {
+  background-color: #eee;
+  color: #000;
+}
+
+.btn-danger {
+  background-color: #e53935;
+  color: #fff;
+}
+
+/* SEARCH BAR */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.search-bar .form-select,
+.search-bar .form-control {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 180px;
+}
+
+.search-bar .form-control {
+  width: 200px;
+}
+
+/* TABLE */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  color: #000;
+}
+
+thead {
+  background-color: #000;
+  color: #fff;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* TABLE */
+.table-container {
+  overflow-x: auto;
+  scrollbar-gutter: stable; /* ✅ prevents width jump */
+}
+
+th:last-child,
+td:last-child {
+  white-space: nowrap; /* ✅ stops wrapping */
+}
+
+.highlight-row {
+  background-color: #ffff99; /* light yellow highlight */
+}
+
+
+
+/* ACTION BUTTONS */
+.action-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: nowrap; /* ✅ keeps buttons inline */
+}
+
+
+
+/* ACTION BUTTONS */
+.action-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .button-group,
+  .search-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+}
+
+
+
+.highlight-row {
+  background-color: #ffff99; /* light yellow highlight */
+}
+
+
+/* PAGINATION CONTAINER */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 30px;
+}
+
+/* PAGINATION BUTTONS */
+.pagination button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #000;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* HOVER */
+.pagination button:hover:not(:disabled) {
+  background-color: #f5b301;
+  border-color: #f5b301;
+  color: #000;
+}
+
+/* ACTIVE PAGE */
+.pagination button.active {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+  font-weight: bold;
+}
+
+/* DISABLED BUTTONS */
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+
+.dashboard-filter {
+  padding: 1px 20px;
+  background-color: #f5b301;
+  border-radius: 12px;
+  margin-left: 500px;
+}
+
+
+
+
+
+/* STEP 1: panel hidden */
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: -350px; /* hidden */
+  width: 350px;
+  height: 100%;
+  background: #f4f7fb;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+
+/* STEP 2: panel visible */
+.filter-panel.open {
+  right: 0;
+}
+
+/* Header */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Body */
+.filter-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-body input {
+  padding: 8px;
+}
+
+.search-btn {
+  margin-top: 10px;
+  padding: 10px;
+  background: #1677ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

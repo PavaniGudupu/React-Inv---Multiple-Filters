@@ -1,0 +1,363 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+/* Hero Section */
+.hero-section {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #111;
+}
+
+/* Container */
+.hero-section .container {
+  max-width: 800px;
+  padding: 20px;
+}
+
+/* Icon */
+.hero-icon {
+  color: #eb2626;
+  margin-bottom: 10px;
+}
+
+/* #f5b301; */
+
+/* Title */
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Subtitle */
+.hero-subtitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #f5b301;
+  margin-bottom: 20px;
+}
+
+/* Description */
+.hero-description {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Primary Button */
+.btn-primary-gradient {
+  background-color: #f5b301;
+  color: #000;
+  padding: 10px 24px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Outline Button */
+.custom-outline-btn {
+  border: 2px solid #000;
+  color: #000;
+  padding: 10px 24px;
+  border-radius: 25px;
+  background-color: transparent;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+
+
+/* ========================= RESET ========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========================= BODY ========================= */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 20px;
+}
+
+/* ========================= FORM SECTION ========================= */
+.hero-section {
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.hero-section .container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* ========================= HEADING ========================= */
+.hero-component-heading {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ========================= FORM ELEMENTS ========================= */
+.form-label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+  color: #333;
+  text-align: left;
+}
+
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+/* ========================= GRID STRUCTURE ========================= */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.col-md-4 {
+  flex: 1 1 30%;
+  min-width: 200px;
+}
+
+.col-md-6 {
+  flex: 1 1 48%;
+  min-width: 250px;
+}
+
+.col-md-12 {
+  flex: 1 1 100%;
+}
+
+/* ========================= BUTTONS ========================= */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-primary-gradient {
+  background-color: #f5b301;
+  color: #000;
+  padding: 10px 24px;
+  border-radius: 25px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button {
+  padding: 10px 24px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  background-color: transparent;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ========================= RESPONSIVE ========================= */
+@media (max-width: 768px) {
+  .col-md-4,
+  .col-md-6 {
+    flex: 1 1 100%;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-section .container {
+    padding: 20px;
+  }
+}
+
+
+
+
+
+
+/* STEP 1: panel hidden */
+/* PANEL */
+.filter-panel {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 350px;
+  height: 100%;
+  background: #f4f7fb;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* OPEN STATE */
+.filter-panel.open {
+  right: 0;
+}
+
+/* HEADER */
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.filter-header h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+/* CLOSE BUTTON */
+.filter-close {
+  padding: 6px 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background: transparent;
+  border: 0.1px solid rgb(82, 82, 82);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-close:hover {
+  color: rgb(250, 130, 130);
+  border: 1px solid rgb(233, 128, 128);
+  border-radius: 4px;
+}
+
+/* BODY */
+.filter-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* reduced spacing */
+  overflow-y: auto;
+}
+
+/* LABEL */
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+/* COMMON INPUT STYLE */
+.filter-control,
+.form-control {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px; /* reduced */
+}
+
+/* CATEGORY SELECT */
+.filter-select {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* PRICE ROW (MRP, SP, CP) */
+.col-md-4 {
+  display: flex;
+  gap: 6px; /* tighter alignment */
+  align-items: center;
+}
+
+/* OPERATOR SELECT */
+.form-price-select {
+  width: 60px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* REMOVE EXTRA BR TAG SPACE */
+.row {
+  margin: 0;
+}
+
+.filter-apply-btn {
+  width: 100px;
+  background-color: #1f82eb;
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  border-radius: 12px;
+  border: 0;
+}
+
+.filter-apply-btn:hover{
+  background-color: #67b0ff;
+  color: black;
+}
+
+
+.filter-close-btn {
+  width: 100px;
+  background-color: #c5c5c5;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 12px;
+  border: 0;
+}
+
+.filter-close-btn:hover{
+  background-color: #dbd9d9;
+  color: rgb(92, 91, 91);
+}

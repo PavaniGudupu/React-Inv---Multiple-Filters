@@ -1,4 +1,4 @@
-# URI Encoded & Decoded Component – React Inventory
+# Multiple Filters in Panel – React Inventory
 
 
 A frontend Inventory Management Dashboard built with **React.js**, implementing advanced **pagination handling** and **URI encoded component communication** to preserve user state and improve navigation experience.
@@ -12,7 +12,8 @@ This project focuses on:
 - Enhancing user experience with dynamic highlighting  
 
 
-https://github.com/user-attachments/assets/bdddda33-732e-4ef1-8efb-72dae06da1ec
+<img width="1919" height="1033" alt="image" src="https://github.com/user-attachments/assets/a3cb3918-a1b4-48c8-b5b2-f341eef135d2" />
+
 
 
 ---

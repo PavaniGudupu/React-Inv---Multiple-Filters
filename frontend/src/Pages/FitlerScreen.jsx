@@ -4,7 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { FaBackward } from "react-icons/fa6";
 import { MdCleaningServices } from "react-icons/md";
 
-const FitlerScreen = ({ isOpen, isClose, setData, setTotalPages }) => {
+const FitlerScreen = ({ isOpen, isClose, setData, setCurrentPage, setTotalPages, setAppliedFilters, setIsFilterMode }) => {
   const clearFilters = {
     id: "",
     product_name: "",
@@ -151,8 +151,23 @@ const handleApply = async () => {
     const pagination = data.response;
 
 setData(pagination.results);
-setTotalPages(pagination.totalPages);
+// Remember:
+// setData belongs to Dashboard.
 
+// When you call:
+// setData(pagination.results);
+// React updates Dashboard state.
+
+// When state changes →
+// 👉 Dashboard re-renders
+// 👉 Table automatically updates
+
+// You do NOT need to go back manually.
+// React does it automatically.
+setTotalPages(pagination.totalPages);
+setAppliedFilters(formattedFilters);
+setIsFilterMode(true);
+setCurrentPage(1);
 isClose();
 
   } catch (error) {
@@ -160,7 +175,40 @@ isClose();
   }
 };
 
+// 📦 Simple Real Life Example
 
+// Think like this:
+
+// Dashboard = Big Box 📦
+// FilterScreen = Small Box 📦
+
+// Dashboard says:
+
+// "Hey FilterScreen, if you get new products, use this setData function."
+
+// FilterScreen:
+
+// "Okay boss 😄"
+
+// When backend gives filtered data →
+
+
+
+
+
+// Click Apply
+//      ↓
+// handleApply()
+//      ↓
+// Send filters to backend
+//      ↓
+// Backend returns filtered data
+//      ↓
+// setData(newData)
+//      ↓
+// Dashboard state updates
+//      ↓
+// Table re-renders automatically
 
 
 

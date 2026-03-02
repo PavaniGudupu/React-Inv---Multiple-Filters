@@ -28,7 +28,7 @@ export const getProductListNew = async (columns) => {
     //so, sql is = SELECT * FROM products WHERE mrp > 100 AND sp < 500 AND productName ILIKE '%rice%'
   }
   sql += ` ORDER BY p.id DESC LIMIT ${size} OFFSET ${offset}`;
-  console.log(sql);
+ // console.log(sql);
   return db.manyOrNone(sql);
 };
 

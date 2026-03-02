@@ -20,34 +20,59 @@ const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [lastEditId, setLastEditId] = useState(null);
 
+const [appliedFilters, setAppliedFilters] = useState({});
+const [isFilterMode, setIsFilterMode] = useState(false);
+
   const [isFilterOpen, setFilterScreen] = useState(false);
 
   const size = 10;
   const location = useLocation();
 
   //  Fetch products
-  const fetchProducts = useCallback(async () => {
-    try {
-      const res = await fetch("http://localhost:4000/productList", {
+ const fetchProducts = useCallback(async () => {
+  try {
+
+    let res;
+
+    if (isFilterMode) {
+
+      // 👉 FILTER API
+      res = await fetch("http://localhost:4000/productList-Filters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filters: appliedFilters,
+          page: currentPage,
+          size
+        }),
+      });
+
+    } else {
+
+      // 👉 NORMAL API
+      res = await fetch("http://localhost:4000/productList", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           filterCategory,
           search,
           page: currentPage,
-          size,
+          size
         }),
       });
 
-      const json = await res.json();
-      const pagination = json.response;
-
-      setData(pagination.results);
-      setTotalPages(pagination.totalPages);
-    } catch (error) {
-      console.error("Fetch error:", error);
     }
-  }, [currentPage, filterCategory, search]);
+
+    const json = await res.json();
+    const pagination = json.response;
+
+    setData(pagination.results);
+    setTotalPages(pagination.totalPages);
+
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}, [currentPage, filterCategory, search, isFilterMode, appliedFilters]);
 
   // ✅ Restore page, search, filter & highlight after edit
   useEffect(() => {
@@ -162,7 +187,10 @@ const Dashboard = () => {
   isOpen={isFilterOpen}
   isClose={() => setFilterScreen(false)}
   setData={setData}
+  setCurrentPage={setCurrentPage}   // ✅ ADD THIS
   setTotalPages={setTotalPages}
+  setAppliedFilters={setAppliedFilters}
+  setIsFilterMode={setIsFilterMode}
 />
         </div>
 

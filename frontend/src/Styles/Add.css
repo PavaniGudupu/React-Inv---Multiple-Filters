@@ -349,7 +349,7 @@ body {
 
 
 .filter-close-btn {
-  width: 100px;
+  width: 50px;
   background-color: #c5c5c5;
   color: rgb(0, 0, 0);
   padding: 10px;
@@ -359,5 +359,20 @@ body {
 
 .filter-close-btn:hover{
   background-color: #dbd9d9;
+  color: rgb(92, 91, 91);
+}
+
+
+.filter-clear-btn {
+  width: 100px;
+  background-color: #f3c28b;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 12px;
+  border: 0;
+}
+
+.filter-clear-btn:hover{
+  background-color: #ffd3a0;
   color: rgb(92, 91, 91);
 }

@@ -1,127 +1,70 @@
 import db from "./db.js";
-// import { allowedOperators, allowedColumns } from "../utils/filterConfig.js";
 
-// export const getProductList = async (params) => {
-//   const { filters = {}, size = 10, offset = 0 } = params;
+export const getProductListNew = async (columns) => {
+  const { filters = {}, size = 10, offset = 0 } = columns;
+  let sql = `SELECT p.*, c.category FROM products p INNER JOIN category c ON p.category_id = c.category_id`;
+  let conditions = [];
+  for (let key in filters) {
+    const filter = filters[key]; // mrp : {...}
+    const operator = filter.operator || "ilike"; // {operator : ">", value: 100501}
+    if (operator === "eq") {
+      conditions.push(`${key} = '${filter.value}'`);
+    }
+    if (operator === "gt") {
+      conditions.push(`${key} > ${filter.value}`);
+    }
+    if (operator === "lt") {
+      conditions.push(`${key} < ${filter.value}`);
+    }
+    if (operator === "ilike") {
+      conditions.push(`${key} ILIKE '${filter.value}'`);
+    }
+  }
+  if (conditions.length > 0) {
+    sql += " WHERE " + conditions.join(" AND ");
+    //It joins array elements into one string.
+    //conditions = ["mrp > 100", "sp < 500", "productName ILIKE '%rice%'"];
+    //becomes mrp > 100 AND sp < 500 AND productName ILIKE '%rice%'
+    //so, sql is = SELECT * FROM products WHERE mrp > 100 AND sp < 500 AND productName ILIKE '%rice%'
+  }
+  sql += ` ORDER BY p.id DESC LIMIT ${size} OFFSET ${offset}`;
+  console.log(sql);
+  return db.manyOrNone(sql);
+};
 
-//   let sql = `
-//     SELECT p.*, c.category
-//     FROM products p
-//     INNER JOIN category c ON p.category_id = c.category_id
-//   `;
+export const getProductListCount = async (columns) => {
+  const { filters = {} } = columns;
 
-//   let conditions = [];
-//   //   conditions = [
-//   //   "p.mrp > ${value1}",
-//   //   "p.sp < ${value2}"
-//   // ]
+  let sql = `
+    SELECT COUNT(*) AS total
+    FROM products p
+    INNER JOIN category c ON p.category_id = c.category_id
+  `;
 
-//   let values = { size, offset };
-//   //   values = {
-//   //   value1: 2000,
-//   //   value2: 4000
-//   // }
-//   let index = 1;
+  let conditions = [];
 
-//   // Loop through filters
-//   for (let field in filters) {
-//     //   field = "mrp"
-//     // filters = {
-//     //   mrp: { operator: ">", value: 2000 },
-//     //   sp: { operator: "<", value: 4000 }
-//     // }
-
-//     // allowedColumns = {
-//     //   mrp: "p.mrp",
-//     //   sp: "p.sp"
-//     // }
-
-//     // allowedOperators = {
-//     //   ">": ">",
-//     //   "<": "<"
-//     // }
-
-//     // index = 1
-//     // conditions = []
-//     // values = {}
-
-//     const column = allowedColumns[field]; // mrp → p.mrp
-//     if (!column) continue; // If not allowed → skip.
-
-//     const filter = filters[field]; // { operator: ">", value: 2000 }
-
-//     const operator = allowedOperators[filter.operator];
-//     if (!operator) continue; // skip invalid operator
-
-//     const paramName = `value${index}`;
-
-//     // Handle ILIKE separately
-//     if (operator === "ILIKE") {
-//       values[paramName] = `%${filter.value}%`;
-//       // values = {
-//       //   value1: 2000
-//       // }
-//     } else {
-//       values[paramName] = filter.value;
-//     }
-
-//     conditions.push(`${column} ${operator} \${${paramName}}`);
-//     // conditions.push("p.mrp > ${value1}");
-//     index++;
-//   }
-//   if (conditions.length > 0) {
-//     sql += ` WHERE ` + conditions.join(" AND "); // WHERE p.mrp > $/value1/ AND p.sp < $/value2/
-//   }
-//   sql += `
-//     ORDER BY p.id DESC
-//     LIMIT \${size} OFFSET \${offset}`;
-//   return db.manyOrNone(sql, values);
-// };
-
-// export const getProductCount = async (columns) => {
-//   const { filters = {} } = columns;
-
-//   let sql = `
-//     SELECT COUNT(*) AS total
-//     FROM products p
-//     INNER JOIN category c ON p.category_id = c.category_id
-//   `;
-
-//   let conditions = [];
-//   let values = {};
-//   let index = 1;
-
-//   for (let field in filters) {
-//     const column = allowedColumns[field];
-//     if (!column) continue;
-
-//     const filter = filters[field];
-//     const operator = allowedOperators[filter.operator];
-//     if (!operator) continue;
-
-//     const paramName = `value${index}`;
-
-//     if (operator === "ILIKE") {
-//       values[paramName] = `%${filter.value}%`;
-//     } else {
-//       values[paramName] = filter.value;
-//     }
-
-//     conditions.push(`${column} ${operator} \${${paramName}}`);
-//     index++;
-//   }
-
-//   if (conditions.length > 0) {
-//     sql += ` WHERE ` + conditions.join(" AND ");
-//   }
-
-//   const result = await db.one(sql, values);
-
-//   return Number(result.total);
-// };
-
-
-
+  for (let key in filters) {
+    const filter = filters[key];
+    const operator = filter.operator || "ilike";
+    if (operator === "eq") {
+      conditions.push(`${key} = '${filter.value}'`);
+    }
+    if (operator === "gt") {
+      conditions.push(`${key} > ${filter.value}`);
+    }
+    if (operator === "lt") {
+      conditions.push(`${key} < ${filter.value}`);
+    }
+    if (operator === "ilike") {
+      conditions.push(`${key} ILIKE '%${filter.value}%'`);
+    }
+  }
+  if (conditions.length > 0) {
+    sql += " WHERE " + conditions.join(" AND ");
+  }
+  const result = await db.one(sql);
+  return Number(result.total);
+};
 
 export const getProductList = async (columns) => {
   const { filterCategory, search, size = 10, offset = 0 } = columns;
@@ -149,7 +92,6 @@ export const getProductList = async (columns) => {
   return db.manyOrNone(sql, columns);
 };
 
-
 export const getProductCount = async (columns) => {
   const { filterCategory, search } = columns;
 
@@ -168,10 +110,10 @@ export const getProductCount = async (columns) => {
   return Number(result.total);
 };
 
-
 export const getProduct = async (id) => {
-  let sql = `SELECT p.*, c.category FROM products p JOIN category c 
-    on p.category_id = c.category_id WHERE id=${id} ORDER BY p.id DESC`;
+  let sql = `SELECT p.*, c.category FROM products p
+   INNER JOIN category c on p.category_id = c.category_id 
+   WHERE id=${id} ORDER BY p.id DESC`;
   const result = await db.any(sql, id);
   return result;
 };

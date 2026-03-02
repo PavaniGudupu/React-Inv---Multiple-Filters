@@ -8,7 +8,9 @@ import axios from "axios";
 import Navbar from "../Partials/Navbar";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
-import FilterScreen from './FitlerScreen.jsx';
+import FilterScreen from "./FitlerScreen.jsx";
+import { FaSearch } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa";
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
@@ -23,7 +25,7 @@ const Dashboard = () => {
   const size = 10;
   const location = useLocation();
 
-  // ✅ Fetch products
+  //  Fetch products
   const fetchProducts = useCallback(async () => {
     try {
       const res = await fetch("http://localhost:4000/productList", {
@@ -31,6 +33,7 @@ const Dashboard = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           filterCategory,
+          search,
           page: currentPage,
           size,
         }),
@@ -44,7 +47,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Fetch error:", error);
     }
-  }, [currentPage, filterCategory]);
+  }, [currentPage, filterCategory, search]);
 
   // ✅ Restore page, search, filter & highlight after edit
   useEffect(() => {
@@ -146,11 +149,21 @@ const Dashboard = () => {
             onChange={handleSearch}
           />
 
-
-          
-        <button type="button" className="dashboard-filter" onClick={() => {setFilterScreen(true)}}>Filter</button>
-        <FilterScreen isOpen={isFilterOpen} isClose={() => {setFilterScreen(false)}} />
-
+          <button
+            type="button"
+            className="dashboard-filter"
+            onClick={() => {
+              setFilterScreen(true);
+            }}
+          >
+            <FaSearch /> Filters | <FaFilter />
+          </button>
+<FilterScreen
+  isOpen={isFilterOpen}
+  isClose={() => setFilterScreen(false)}
+  setData={setData}
+  setTotalPages={setTotalPages}
+/>
         </div>
 
         {/* Table */}

@@ -20,55 +20,79 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-// app.post("/productList", async (req, res) => {
-//   try {
-//     const body = req.body ?? {}; 
-//     const filters = body.filters ?? {};
-//     const page = Number(body.page) || 1;
-//     const limit = Number(body.size) || 10;
-//     const offset = (page - 1) * limit;
-
-//     const total = await productData.getProductCount({ filters });
-//     const rows = await productData.getProductList({
-//       filters,
-//       size: limit,
-//       offset,
-//     });
-
-//     const results = rows.map(mapToViewDTO);
-
-//     res.json(
-//       success({
-//         current: { page, limit },
-//         totalPages: Math.ceil(total / limit),
-//         results,
-//       }),
-//     );
-//   } catch (error) {
-//     res.status(500).json(failure(error.message));
-//   }
-// });
-
-
 app.post("/productList", async (req, res) => {
   try {
     const filterCategory = req.body.filterCategory;
     const search = req.body.search;
+
     const page = parseInt(req.body.page) || 1;
-    const limit = parseInt(req.body.size) || 10; 
-    const offset = (page - 1) * limit;   //starts with index
-    const total = await productData.getProductCount({filterCategory, search});
+    const limit = parseInt(req.body.size) || 10;
+    const offset = (page - 1) * limit;
 
+    const total = await productData.getProductCount({
+      filterCategory,
+      search,
+    });
+    const rows = await productData.getProductList({
+      filterCategory,
+      search,
+      size: limit,
+      offset,
+    });
 
-    const rows = await productData.getProductList({filterCategory, search, size: limit, offset});
     const results = rows.map(mapToViewDTO);
+    const totalPages = Math.ceil(total / limit);
+
     const pagination = {
       current: { page, limit },
-      totalPages: Math.ceil(total / limit),
+      totalPages,
       results,
     };
 
-    if (page < Math.ceil(total / limit)) {
+    if (page < totalPages) {
+      pagination.next = { page: page + 1, limit };
+    }
+
+    if (page > 1) {
+      pagination.previous = { page: page - 1, limit };
+    }
+
+    res.json(success(pagination));
+  } catch (error) {
+    res.status(500).json(failure(error.message));
+  }
+});
+
+
+
+app.post("/productList-Filters", async (req, res) => {
+  try {
+  
+    const filters = req.body.filters;
+
+    const page = parseInt(req.body.page) || 1;
+    const limit = parseInt(req.body.size) || 10;
+    const offset = (page - 1) * limit;
+
+    const total = await productData.getProductListCount({
+      filters,
+    });
+
+    const rows = await productData.getProductListNew({
+      filters,
+      size: limit,
+      offset,
+    });
+    const results = rows.map(mapToViewDTO);
+    const totalPages = Math.ceil(total / limit);
+
+    const pagination = {
+      current: { page, limit },
+      totalPages,
+      results,
+    };
+
+    if (page < totalPages) {
       pagination.next = { page: page + 1, limit };
     }
 
@@ -118,11 +142,14 @@ app.post("/category", async (req, res) => {
   }
 });
 
-app.post("/summary", async(req, res) =>{
-  try{
-    const response = await productData.getDashboardCount({filterCategory, search});
+app.post("/summary", async (req, res) => {
+  try {
+    const response = await productData.getDashboardCount({
+      filterCategory,
+      search,
+    });
     res.json(success(response));
-  } catch(error) {
+  } catch (error) {
     console.log(error.message);
     res.status(500).json(failure(error.message));
   }

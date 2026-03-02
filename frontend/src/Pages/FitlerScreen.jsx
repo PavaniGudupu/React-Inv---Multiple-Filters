@@ -1,9 +1,36 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/Add.css";
 import { FaCheck } from "react-icons/fa";
+import { FaBackward } from "react-icons/fa6";
+import { MdCleaningServices } from "react-icons/md";
 
-
-const FitlerScreen = ({ isOpen, isClose }) => {
+const FitlerScreen = ({ isOpen, isClose, setData, setTotalPages }) => {
+  const clearFilters = {
+    id: "",
+    product_name: "",
+    category_id: "",
+    mrpOperator: "",
+    mrpValue: "",
+    spOperator: "",
+    spValue: "",
+    cpOperator: "",
+    cpValue: "",
+    classification: "",
+    size: ""
+  }
+  const [filters, setFilters] = useState({
+    id: "",
+    product_name: "",
+    category_id: "",
+    mrpOperator: "",
+    mrpValue: "",
+    spOperator: "",
+    spValue: "",
+    cpOperator: "",
+    cpValue: "",
+    classification: "",
+    size: ""
+  })
   const [filterCategory, setFilterCategory] = useState([]);
   const priceFilters = [
     { label: "⇄", value: "" },
@@ -25,6 +52,118 @@ const FitlerScreen = ({ isOpen, isClose }) => {
       });
   }, []);
 
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFilters((prev) => {
+      return {
+        ...prev,
+        [name]: value
+      }
+    })
+  }
+
+
+const handleApply = async () => {
+  let formattedFilters = {};
+
+  // Product Code
+  if (filters.id) {
+    formattedFilters.id = {
+      operator: "eq",
+      value: filters.id,
+    };
+  }
+
+  // Product Name
+  if (filters.product_name) {
+    formattedFilters.product_name = {
+      operator: "ilike",
+      value: filters.product_name,
+    };
+  }
+
+  // Category
+  if (filters.category_id) {
+    formattedFilters.category = {
+      operator: "eq",
+      value: filters.category_id,
+    };
+  }
+
+  // MRP
+  if (filters.mrpOperator && filters.mrpValue) {
+    formattedFilters.mrp = {
+      operator: filters.mrpOperator,
+      value: filters.mrpValue,
+    };
+  }
+
+  // SP
+  if (filters.spOperator && filters.spValue) {
+    formattedFilters.sp = {
+      operator: filters.spOperator,
+      value: filters.spValue,
+    };
+  }
+
+  // CP
+  if (filters.cpOperator && filters.cpValue) {
+    formattedFilters.cp = {
+      operator: filters.cpOperator,
+      value: filters.cpValue,
+    };
+  }
+
+  // Classification
+  if (filters.classification) {
+    formattedFilters.classification = {
+      operator: "ilike",
+      value: filters.classification,
+    };
+  }
+
+  // Size
+  if (filters.size) {
+    formattedFilters.size = {
+      operator: "ilike",
+      value: filters.size,
+    };
+  }
+
+  try {
+    const response = await fetch("http://localhost:4000/productList-Filters", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        filters: formattedFilters,
+        page: 1,
+        size: 10,
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log("Filtered Data:", data);
+
+    const pagination = data.response;
+
+setData(pagination.results);
+setTotalPages(pagination.totalPages);
+
+isClose();
+
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+
+
+
+
   return (
     <div className={`filter-panel ${isOpen ? "open" : ""}`}>
       <div className="filter-header">
@@ -40,12 +179,12 @@ const FitlerScreen = ({ isOpen, isClose }) => {
             <br></br>
             <label className="form-label">Product Code</label>
             <input
+            onChange={handleChange}
               className="filter-control"
               name="id"
               placeholder="Enter Product Code"
-              value=""
+              value={filters.id}
               type="number"
-              required
             />
           </div>
         </div>
@@ -54,12 +193,12 @@ const FitlerScreen = ({ isOpen, isClose }) => {
           <div className="col-md-12">
             <label className="form-label">Product Name</label>
             <input
+             onChange={handleChange}
               className="filter-control"
-              name="id"
+              name="product_name"
               placeholder="Enter Product Name"
-              value=""
+              value={filters.product_name}
               type="text"
-              required
             />
           </div>
         </div>
@@ -67,7 +206,12 @@ const FitlerScreen = ({ isOpen, isClose }) => {
         <div className="row">
           <div className="col-md-12">
             <label className="form-label">Category</label>
-            <select className="filter-select" name={filterCategory} required>
+<select 
+  className="filter-select" 
+  name="category_id"
+  onChange={handleChange}
+  value={filters.category_id}
+>
               <option className="filter-select-placeholder" value="">
                 --- Select the Category ---
               </option>
@@ -86,7 +230,10 @@ const FitlerScreen = ({ isOpen, isClose }) => {
         <div className="row">
           <div className="col-md-4">
             <label className="form-label">MRP</label>
-            <select name="filter-mrp" className="form-price-select">
+            <select name="mrpOperator" 
+            value={filters.mrpOperator} 
+            className="form-price-select"  
+            onChange={handleChange}>
               {priceFilters.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
@@ -95,12 +242,12 @@ const FitlerScreen = ({ isOpen, isClose }) => {
             </select>
             <input
               className="form-control"
-              name="mrp"
-              value=""
+              name="mrpValue"
+              value={filters.mrpValue}
+              onChange={handleChange}
               placeholder="Enter MRP"
               type="number"
               step="0.01"
-              required
             />
           </div>
         </div>
@@ -108,7 +255,8 @@ const FitlerScreen = ({ isOpen, isClose }) => {
         <div className="row">
           <div className="col-md-4">
             <label className="form-label">SP  <br></br></label><br></br><br></br>
-            <select name="filter-rp" className="form-price-select">
+            <select name="spOperator" value={filters.spOperator} className="form-price-select"  
+            onChange={handleChange}>
               {priceFilters.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
@@ -117,9 +265,10 @@ const FitlerScreen = ({ isOpen, isClose }) => {
             </select>
             <input
               className="form-control"
-              name="sp"
+              name="spValue"
               placeholder="Enter SP"
-              value=""
+              value={filters.spValue}
+              onChange={handleChange}
               type="number"
               step="0.01"
               required
@@ -130,7 +279,7 @@ const FitlerScreen = ({ isOpen, isClose }) => {
         <div className="row">
           <div className="col-md-4">
             <label className="form-label">CP  <br></br></label><br></br>
-            <select name="filter-cp" className="form-price-select">
+            <select name="cpOperator" value={filters.cpOperator} className="form-price-select"  onChange={handleChange}>
               {priceFilters.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
@@ -139,9 +288,10 @@ const FitlerScreen = ({ isOpen, isClose }) => {
             </select>
             <input
               className="form-control"
-              name="cp"
+              name="cpValue"
+              onChange={handleChange}
               placeholder="Enter CP"
-              value=""
+              value={filters.cpValue}
               type="number"
               step="0.01"
               required
@@ -152,11 +302,11 @@ const FitlerScreen = ({ isOpen, isClose }) => {
         <div className="row">
           <div className="col-md-12">
             <label className="form-label">Classification</label>
-            <input
+            <input  onChange={handleChange}
               className="filter-control"
               name="classification"
               placeholder="Enter Classification"
-              value=""
+              value={filters.classification}
               type="text"
             />
           </div>
@@ -165,11 +315,11 @@ const FitlerScreen = ({ isOpen, isClose }) => {
         <div className="row">
           <div className="col-md-12">
             <label className="form-label">Size</label>
-            <input
+            <input  onChange={handleChange}
               className="filter-control"
               name="size"
               placeholder="Enter Size"
-              value=""
+              value={filters.size}
               type="text"
             />
           </div>
@@ -178,9 +328,14 @@ const FitlerScreen = ({ isOpen, isClose }) => {
 <br></br>
 
 <div className="row">
-  <button type="submit" className="filter-apply-btn">Apply <FaCheck /></button>
-  <button type="submit" onClick={isClose} className="filter-close-btn">Back </button>
-
+  <button
+  type="button"
+  onClick={handleApply}
+  className="filter-apply-btn"
+>Apply <FaCheck /></button>
+  
+  <button type="submit" onClick={() => setFilters(clearFilters)} className="filter-clear-btn">Clear <MdCleaningServices /></button>
+  <button type="submit" onClick={isClose} className="filter-close-btn"><FaBackward /> </button>
   </div>
 
 

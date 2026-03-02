@@ -308,12 +308,20 @@ td:last-child {
 
 
 .dashboard-filter {
-  padding: 1px 20px;
-  background-color: #f5b301;
-  border-radius: 12px;
-  margin-left: 500px;
+   background: #f3f6f9;
+  border: 1px solid #cfd6dd;
+   padding: 3px 18px;
+  border-radius: 10px;
+    font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+  margin-left: 480px;
 }
 
+.dashboard-filter:hover {
+  border-color: #0187f5;
+  color: blue;
+}
 
 
 

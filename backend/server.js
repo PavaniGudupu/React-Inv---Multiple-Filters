@@ -74,15 +74,15 @@ app.post("/productList-Filters", async (req, res) => {
     const limit = parseInt(req.body.size) || 10;
     const offset = (page - 1) * limit;
 
-    const total = await productData.getProductListCount({
-      filters,
-    });
-
-    const rows = await productData.getProductListNew({
-      filters,
-      size: limit,
-      offset,
-    });
+    const total = await productData.getProductListCount({filters, });
+    const rows = await productData.getProductListNew({ filters, size: limit, offset });
+//     {
+//   "page": 1,
+//   "size": 10,
+//   "filters": {
+//     "mrp": { "operator": "⇄", "value": 1000 }
+//   }
+// }
     const results = rows.map(mapToViewDTO);
     const totalPages = Math.ceil(total / limit);
 

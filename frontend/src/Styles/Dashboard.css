@@ -307,7 +307,7 @@ td:last-child {
 
 
 
-.dashboard-filter {
+/* .dashboard-filter {
    background: #f3f6f9;
   border: 1px solid #cfd6dd;
    padding: 3px 18px;
@@ -324,7 +324,34 @@ td:last-child {
 }
 
 
+.filter-active{
+  background: #ff9800;
+  color: white;
+  font-weight: bold;
+} */
 
+
+.dashboard-filter {
+  background: #f3f6f9;
+  border: 1px solid #cfd6dd;
+  padding: 3px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d2d2d;
+  margin-left: auto;
+}
+
+.dashboard-filter:hover {
+  border-color: #0187f5;
+  color: rgb(4, 36, 179);
+}
+
+.filter-active{
+  background: #3fa9ff;
+  color: rgb(255, 255, 255);
+  border-color:#026ec7;
+}
 
 /* STEP 1: panel hidden */
 .filter-panel {
@@ -373,4 +400,37 @@ td:last-child {
   color: white;
   border: none;
   cursor: pointer;
+}
+
+
+
+
+
+.filter-chips-container {
+  margin: 15px 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  background: #e0f3ff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.chip-close {
+  margin-left: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.clear-all {
+  background: #ffdddd;
+  cursor: pointer;
+  font-weight: bold;
 }

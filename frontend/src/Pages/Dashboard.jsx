@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [lastEditId, setLastEditId] = useState(null);
 
 const [appliedFilters, setAppliedFilters] = useState({});
-const [isFilterMode, setIsFilterMode] = useState(false);
+const [isFilterMode, setIsFilterMode] = useState(false);     //chips
 
   const [isFilterOpen, setFilterScreen] = useState(false);
 
@@ -176,7 +176,7 @@ const [isFilterMode, setIsFilterMode] = useState(false);
 
           <button
             type="button"
-            className="dashboard-filter"
+            className={`dashboard-filter ${isFilterMode ? "filter-active" : ""}`}
             onClick={() => {
               setFilterScreen(true);
             }}
@@ -187,10 +187,10 @@ const [isFilterMode, setIsFilterMode] = useState(false);
   isOpen={isFilterOpen}
   isClose={() => setFilterScreen(false)}
   setData={setData}
-  setCurrentPage={setCurrentPage}   // ✅ ADD THIS
+  setCurrentPage={setCurrentPage}  
   setTotalPages={setTotalPages}
   setAppliedFilters={setAppliedFilters}
-  setIsFilterMode={setIsFilterMode}
+  setIsFilterMode={setIsFilterMode}   //chips
 />
         </div>
 
@@ -253,6 +253,65 @@ const [isFilterMode, setIsFilterMode] = useState(false);
             })}
           </tbody>
         </table>
+
+
+        {/* FILTER CHIPS - state and nultiple filters applied in filter scereen */ }
+       
+{isFilterMode && Object.keys(appliedFilters).length > 0 && (
+  
+  <div className="filter-chips-container">
+    <span 
+      className="chip clear-all"
+      onClick={() => {
+        setAppliedFilters({});
+        setIsFilterMode(false);
+        setCurrentPage(1);
+      }}> ✖ Clear All </span>
+
+   
+
+    {Object.entries(appliedFilters).map(([key, value]) => (
+      <span key={key} className="chip">
+     {key} 
+{value.operator === "gt" && " > "}
+{value.operator === "lt" && " < "}
+{value.operator === "eq" && " = "}
+{value.operator === "ilike" && " contains "}
+{value.value}
+        
+        <button
+          className="chip-close"
+          onClick={() => {
+            const updated = { ...appliedFilters };
+            delete updated[key];
+
+// Before:
+// {
+//  product_name: {...},
+//  mrp: {...}
+// }
+
+// After:
+// {
+//  product_name: {...}
+// }
+
+// Then:setAppliedFilters(updated)
+
+            setAppliedFilters(updated);
+
+            if (Object.keys(updated).length === 0) {
+              setIsFilterMode(false);
+            }
+          }}
+        >
+          ✖
+        </button>
+      </span>
+    ))}
+
+  </div>
+)}
 
         {/* Pagination */}
         <div className="pagination">

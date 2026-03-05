@@ -2,13 +2,19 @@ import db from "./db.js";
 
 export const getProductListNew = async (columns) => {
   const { filters = {}, size = 10, offset = 0 } = columns;
-  let sql = `SELECT p.*, c.category FROM products p INNER JOIN category c ON p.category_id = c.category_id`;
+  let sql = `SELECT p.*, c.category FROM products p 
+             INNER JOIN category c ON p.category_id = c.category_id`;
+
   let conditions = [];
-  for (let key in filters) {
-    const filter = filters[key]; // mrp : {...}
-    const operator = filter.operator || "ilike"; // {operator : ">", value: 100501}
+//   "filters": {
+//     "mrp": { "operator": ">", "value": 1000 }
+//     "sp": { "operator": ">", "value": 1000 }
+//   }
+  for (let key in filters) { 
+    const filter = filters[key]; //{ "operator": ">", "value": 1000 }
+    const operator = filter.operator || "ilike"; // > , <....
     if (operator === "eq") {
-      conditions.push(`${key} = '${filter.value}'`);
+      conditions.push(`${key} = '${filter.value}'`); // "value": 1000
     }
     if (operator === "gt") {
       conditions.push(`${key} > ${filter.value}`);

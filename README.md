@@ -1,159 +1,191 @@
-#  Filter Chips - Mulitple Filter in Panel  – React Inventory
+#  🧩 Filter Panel + Filter Chips – React Inventory Dashboard
 
 
-A frontend Inventory Management Dashboard built with **React.js**, implementing advanced **pagination handling** and **URI encoded component communication** to preserve user state and improve navigation experience.
+A full-stack Inventory Management Dashboard built with React.js + Node.js + PostgreSQL, implementing advanced multi-column filtering from a filter panel with dynamic SQL generation on the backend.
 
-This project focuses on:
+This project demonstrates a real-world filtering system where users can apply multiple filters simultaneously, visualize them as removable filter chips, and dynamically fetch filtered data from the backend.
 
-- Managing large datasets using server-side pagination  
-- Preserving page state after edit operations  
-- Passing row data securely using URI encoding  
-- Restoring user search & filter context  
-- Enhancing user experience with dynamic highlighting  
+The focus of this implementation is:
+- Dynamic filter query building
+- Multiple filter application
+- Filter chips UI
+- Server-side pagination with filters
+- Full frontend ↔ backend filter integration
+
+https://github.com/user-attachments/assets/74bb2322-0d15-496d-9cc6-d302c9c04f39
 
 
-https://github.com/user-attachments/assets/bdddda33-732e-4ef1-8efb-72dae06da1ec
 
 
 ---
 
 ## 🚀 Features
+- Advanced Filtering
+- Multi-column filter panel
+- Supports numeric and text filters
+- Operators supported
+- 🗑 CRUD Operations
 
-- 🔢 Server-side pagination  
-- 🔍 Search & category filtering  
-- 🔁 First / Previous / Next / Last navigation  
-- 🔐 URI Encoded product data transfer  
-- 💾 LocalStorage context preservation  
-- 🎯 Highlight last edited row  
-- 🗑 Delete with confirmation  
-- 🌐 API integration using Fetch & Axios  
-- 📹 Demo video included  
+## 🧩 Filter Chips UI
+
+Applied filters appear as chips above the table.
+
+Products are fetched from backend using:
+Example:
+```
+product_name contains rice  ✖
+mrp > 1000                  ✖
+classification contains veg ✖
+```
+Users can:
+- Remove individual filters
+- Clear all filters instantly
 
 ---
 
-## 🧠 Core Implementation Overview
+## 🧠 Core Implementation
 
-### 1️⃣ Pagination Logic
+---
 
-Products are fetched from backend using:
+
+
+
+### 1️⃣ Dynamic Backend Filter Builder
+
+Filters are sent as an object:
 
 ```js
 {
-  filterCategory,
-  search,
-  page: currentPage,
-  size: 10
+  "filters": {
+    "mrp": { "operator": "gt", "value": 1000 },
+    "product_name": { "operator": "ilike", "value": "rice" }
+  }
 }
 ```
 
-### Flow
+Backend dynamically builds SQL conditions.
 
-User Action  
-⬇  
-API Call (`/dashboard`)  
-⬇  
-Backend returns paginated data  
-⬇  
-Update `results` and `totalPages`  
-⬇  
-Render dynamic pagination buttons  
+```
 
----
+for (let key in filters) {
+  const filter = filters[key];
+  const operator = filter.operator || "ilike";
 
-### 2️⃣ Dynamic Pagination Buttons
+  if (operator === "eq") {
+    conditions.push(`${key} = '${filter.value}'`);
+  }
 
-No hardcoded page numbers.
+  if (operator === "gt") {
+    conditions.push(`${key} > ${filter.value}`);
+  }
 
-```js
-for (let page = 1; page <= totalPages; page++) {
-  buttons.push(
-    <button
-      key={page}
-      className={page === currentPage ? "active" : ""}
-      onClick={() => setCurrentPage(page)}
-    >
-      {page}
-    </button>
-  );
+  if (operator === "lt") {
+    conditions.push(`${key} < ${filter.value}`);
+  }
+
+  if (operator === "ilike") {
+    conditions.push(`${key} ILIKE '%${filter.value}%'`);
+  }
 }
+
 ```
 
-✔ Automatically adjusts based on backend data  
-✔ Highlights active page  
-✔ Disables navigation buttons when required  
+Generated SQL example:
+
+```
+SELECT p.*, c.category
+FROM products p
+INNER JOIN category c
+ON p.category_id = c.category_id
+WHERE mrp > 1000
+AND product_name ILIKE '%rice%'
+ORDER BY p.id DESC
+LIMIT 10 OFFSET 0
+
+```
+
 
 ---
 
-### 3️⃣ URI Encoded Component Communication
+### 2️⃣ Filter Panel (Frontend)
 
-Instead of fetching product again in edit page, row data is:
-
-1. Converted to JSON  
-2. Encoded using `btoa()`  
-3. URI encoded  
-4. Passed via query parameter  
+Users apply filters from a dedicated panel.
+Example state:
 
 ```js
-const encodeCtx = (obj) =>
-  encodeURIComponent(btoa(JSON.stringify(obj)));
+const [filters, setFilters] = useState({
+  product_name: "",
+  mrpOperator: "",
+  mrpValue: "",
+  spOperator: "",
+  spValue: "",
+  classification: "",
+});
 ```
 
-Navigation example:
+Filters are converted before API request.
 
 ```
-/EditProduct?ctx=<encodedData>
+formattedFilters.mrp = {
+  operator: filters.mrpOperator,
+  value: filters.mrpValue
+};
 ```
+API request:
+```
+fetch("/productList-Filters", {
+  method: "POST",
+  body: JSON.stringify({
+    filters: formattedFilters,
+    page: 1,
+    size: 10
+  })
+});
+```
+---
+
+### 3️⃣ Filter Chips UI
+After applying filters:
+```js
+setAppliedFilters(formattedFilters);
+setIsFilterMode(true);
+```
+
+Chips render dynamically:
+```
+{Object.entries(appliedFilters).map(([key, value]) => (
+  <span className="chip">
+    {key} {value.operator} {value.value}
+  </span>
+))}
+```
+
 
 ---
 
-### 4️⃣ Decoding in Edit Component
+### 4️⃣ Remove Individual Filter
+
+Each chip contains a remove button.
 
 ```js
-const decodedString = atob(decodeURIComponent(ctx));
-const product = JSON.parse(decodedString);
+delete updated[key];
+setAppliedFilters(updated);
 ```
-
-✔ Reduces unnecessary API calls  
-✔ Faster page load  
-✔ Cleaner architecture  
-
+If all filters removed:
 ---
 
-### 5️⃣ Context Restoration After Edit
-
-Before navigating to edit page:
+## 5️⃣ Clear All Filters
 
 ```js
-localStorage.setItem("dashboardCtx", JSON.stringify({
-  page: currentPage,
-  search,
-  filterCategory,
-  editedId: item.id,
-}));
+setAppliedFilters({});
+setIsFilterMode(false);
+setCurrentPage(1);
 ```
 
-After returning to dashboard:
+Result:
 
-```js
-const savedCtx = localStorage.getItem("dashboardCtx");
-```
-
-✔ Restores:
-- Current Page  
-- Search Input  
-- Selected Filter  
-- Highlights edited row  
-
----
-
-## 🎯 Highlight Last Edited Row
-
-```js
-className={item.id === lastEditId ? "highlight-row" : ""}
-```
-
-Improves visibility and user confidence after update.
-
+- All filters removed
+- Normal dashboard view restored
 ---
 
 
@@ -161,17 +193,22 @@ Improves visibility and user confidence after update.
 
 ## 🌐 API Endpoints Used
 
-| Endpoint             | Method | Purpose                  |
-|----------------------|--------|--------------------------|
-| `/dashboard`         | POST   | Fetch paginated products |
-| `/deleteProduct/:id` | POST   | Delete product           |
-| `/editProduct/:id`   | POST   | Update product           |
-| `/category`          | POST   | Fetch categories         |
-| `/product/:id`       | POST   | Fetch single product     |
+| Endpoint               | Method | Purpose                    |
+| ---------------------- | ------ | -------------------------- |
+| `/productList`         | POST   | Normal search + pagination |
+| `/productList-Filters` | POST   | Apply multiple filters     |
+| `/product/:id`         | POST   | Get product by ID          |
+| `/category`            | POST   | Get category list          |
+| `/deleteProduct/:id`   | POST   | Delete product             |
+
+
+
 
 ---
 
 ## 🛠 Tech Stack
+
+Fropnend: 
 
 - React.js  
 - React Router  
@@ -180,9 +217,29 @@ Improves visibility and user confidence after update.
 - React Toastify  
 - LocalStorage  
 - Bootstrap  
-- CSS  
+- CSS
+
+Backend: 
+
+- Node.js
+- Express.js
+- PostgreSQL
+- pg-promise
 
 ---
+
+## 💡 Key Learning Concepts
+
+This project demonstrates: 
+
+- Dynamic SQL generation
+- Advanced React state management
+- Filter panel architecture
+- Server-side pagination
+- Frontend ↔ backend filter integration
+- Reusable UI components  
+
+
 
 ## 👩‍💻 Author
 
